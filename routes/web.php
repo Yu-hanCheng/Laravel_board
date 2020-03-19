@@ -17,5 +17,7 @@ Route::get('/', function () { return view('welcome');})->name('welcome');
 Route::get('login', function () { return view('login');})->name('login.view');
 Route::get('register', function () { return view('register');})->name('register.view');
 Route::post('login','UserController@login')->name('login');
+Route::get('logout','UserController@logout')->name('logout');
 Route::post('register','UserController@store')->name('register');
 Route::post('post','PostController@store')->name('post');
+Route::get('board','PostController@index')->name('board');

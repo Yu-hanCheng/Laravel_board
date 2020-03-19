@@ -33,9 +33,8 @@ class UserController extends Controller
     {
         $aUser = User::isUser($request['name'],$request['password']); 
         if ($aUser[0]) {
-            return redirect()->route('welcome')
-                ->with('user_id', $aUser[1]['id'])
-                ->with('user_name', $aUser[1]['name']);
+            session(['user' => $aUser[1]]);
+            return redirect()->route('board');
         } else {
             return redirect()->route('login.view')->with('message', $aUser[1]);
         } 

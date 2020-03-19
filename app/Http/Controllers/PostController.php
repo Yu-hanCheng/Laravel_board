@@ -8,6 +8,16 @@ use Carbon\Carbon;
 
 class PostController extends Controller
 {
+    public function index()
+    {
+        $posts = Post::selectAll(); 
+        return view('board', [
+            'posts' => $posts, 
+            'user_id' => session('user')['id'], 
+            'user_name' => session('user')['name']
+            ]);
+    }
+
     public function store(Request $request)
     {
         Post::create([
@@ -16,6 +26,6 @@ class PostController extends Controller
             'content' => $request['content'],
             'created_at' => Carbon::now('Asia/Taipei'),
         ]);
-        return redirect()->route('welcome');
+        return redirect()->route('board');
     }
 }
