@@ -13,6 +13,11 @@
     </head>
     <body>
         <div class="flex-center position-ref full-height">
+            <div class="top-right links">
+                @if (Route::has('register'))
+                <a href="{{ route('register.view') }}">Register</a>
+                @endif    
+            </div>
             <div class="content">
                 <div class="title m-b-md">
                     Login
