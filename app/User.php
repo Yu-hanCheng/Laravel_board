@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -36,4 +37,18 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public static function storeUser($user)
+    { 
+        $isUnique = self::where('name',$user['name'])->first();
+        if ($isUnique) {
+            return false;
+        } else {
+            self::create(
+                ['name' => $user['name'],
+                'password' => $user['password'],
+                'created_at' => $user['created_at']]);
+            return true;
+        }
+    }
 }
