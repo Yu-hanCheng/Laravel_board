@@ -18,3 +18,4 @@ Route::get('login', function () { return view('login');})->name('login.view');
 Route::get('register', function () { return view('register');})->name('register.view');
 Route::post('login','UserController@login')->name('login');
 Route::post('register','UserController@store')->name('register');
+Route::post('post','PostController@store')->name('post');
