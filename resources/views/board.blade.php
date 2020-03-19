@@ -46,6 +46,13 @@
                     <div><a>Name</a> <?= $post->user_name; ?></div>
                     <div><a>Created time</a> <?= substr($post->created_at, 0, strlen($post->created_at)-3); ?></div>
                     <div><a>Content</a> <?= $post->content; ?></div>
+                    <form action="comment" method="post">
+                        @csrf
+                        <input type="hidden" name="post_id" value="<?= $post->id; ?>"></input>
+                        <input type="hidden" name="type" value="0"></input>
+                        <input type="text" id="content" name="content"><br><br>
+                        <input type="submit" value="Comment">
+                    </form>
                 </li>
                 @endforeach
                 </ul>
