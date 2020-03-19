@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'password',
     ];
 
     /**
@@ -51,4 +51,19 @@ class User extends Authenticatable
             return true;
         }
     }
+
+    public static function isUser($name, $password)
+    {
+        $user = self::where('name', $name)->first();
+          if ($user) {
+              if ($password == $user->password) {
+                $user = json_decode(json_encode($user), true);
+                return [1, $user];
+              } else {
+                  return [0, "Password does not match"];
+              }
+          } else {
+              return [0, "User does not exist"];
+          }
+    } 
 }

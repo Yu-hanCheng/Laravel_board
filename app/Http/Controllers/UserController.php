@@ -29,9 +29,16 @@ class UserController extends Controller
         //
     }
 
-    public function login()
+    public function login(Request $request)
     {
-       //
+        $aUser = User::isUser($request['name'],$request['password']); 
+        if ($aUser[0]) {
+            return redirect()->route('welcome')
+                ->with('user_id', $aUser[1]['id'])
+                ->with('user_name', $aUser[1]['name']);
+        } else {
+            return redirect()->route('login.view')->with('message', $aUser[1]);
+        } 
     }
 
     /**
