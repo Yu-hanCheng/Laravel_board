@@ -28,9 +28,9 @@ class Comment extends Model
         $post = Post::find($post_id);
         $results = [];
         foreach ($allcomments as $comment) {
-            $replies = Reply::where('comment_id', $comment->cid)->orderBy('created_at','desc')->get();
+            $replies = Reply::where('comment_id', $comment->id)->orderBy('created_at','desc')->get();
             $comment= json_decode(json_encode($comment), true);
-            $comment['rere'] = $replies;
+            $comment['reply'] = $replies;
             array_push($results,$comment);
         }
         $userLikes = Like::join('users', 'users.id', 'likes.user_id')
