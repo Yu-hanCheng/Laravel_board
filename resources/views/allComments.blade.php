@@ -36,7 +36,7 @@
                     <form class="popuptext" action="reply" method="post" id="myPopup">
                         @csrf
                         <input type="hidden" name="type" value="1"></input>
-                        <input type="hidden" name="post_id" value="<?= $response['post']['id']; ?>"></input>
+                        <input type="hidden" name="post_id" value="{{ $response['post']['id'] }}"></input>
                         <input type="text" name="content" required/>
                         <input type="submit" value="Reply">
                     </form>
@@ -45,7 +45,7 @@
                     <tr>
                         <th>Post</th>
                     </tr>
-                    <tr><td><?= $response['post']['content']; ?></td></tr>
+                    <tr><td>{{ $response['post']['content'] }}</td></tr>
                     <tr><td><b>Who likes:</b> 
                         @foreach ($response['likes'] as $user)
                                <a>{{ $user['name'].', ' }}</a>
@@ -56,7 +56,7 @@
                         <form action="comment" method="post">
                             @csrf
                             <a>Comment...</a>
-                            <input type="hidden" name="post_id" value="<?= $response['post']['id']; ?>"></input>
+                            <input type="hidden" name="post_id" value="{{ $response['post']['id'] }}"></input>
                             <input type="hidden" name="type" value="0"/>>
                             <input type="text" id="comment_content" name="content" required/>> 
                             <input type="submit" value="Comment">
@@ -69,26 +69,26 @@
                         <th>Name</th>
                         <th>Comments</th>
                     </tr>
-                    <?php foreach ($response['Allcomments'] as $comment) : ?>
+                    @foreach ($response['Allcomments'] as $comment)
                     <tr>
-                        <td><?= $comment['user_name'] ?></td>
-                        <td><?= $comment['content'] ?></td>
+                        <td>{{ $comment['user_name'] }}</td>
+                        <td>{{ $comment['content'] }}</td>
                         <td>
                             <table>
-                                <?php foreach ($comment['reply'] as $reply) : ?>
+                                @foreach ($comment['reply'] as $reply)
                                     <tr>
-                                        <td><?= $reply['user_name'] ?></td>
-                                        <td><?= $reply['content'] ?></td>
+                                        <td>{{ $reply['user_name'] }}</td>
+                                        <td>{{ $reply['content'] }}</td>
                                     </tr>
-                                <?php endforeach; ?>
+                                @endforeach
                             </table>
                         </td>
                         <td>
-                        <div onclick=<?= "myFunction(".$comment['id'].")"?>>Reply</div>
+                        <div onclick='myFunction({{ $comment['id'] }})'>Reply</div>
                         </td>
                     </tr>
-                    <?php endforeach; ?>
-                            </table>
+                    @endforeach
+                </table>
             </div>
         </div>
     </body>
