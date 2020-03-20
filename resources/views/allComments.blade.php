@@ -46,6 +46,12 @@
                         <th>Post</th>
                     </tr>
                     <tr><td><?= $response['post']['content']; ?></td></tr>
+                    <tr><td><b>Who likes:</b> 
+                        @foreach ($response['likes'] as $user)
+                               <a>{{ $user['name'].', ' }}</a>
+                                
+                        @endforeach
+                    </td></tr>
                     <tr>
                         <form action="comment" method="post">
                             @csrf

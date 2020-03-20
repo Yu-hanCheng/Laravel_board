@@ -23,3 +23,4 @@ Route::get('board','PostController@index')->name('board.show');
 Route::post('comment','CommentController@store')->name('comment');
 Route::get('comment','CommentController@index')->name('comment.show');
 Route::post('reply','ReplyController@store')->name('reply');
+Route::post('like','LikeController@store')->name('like');

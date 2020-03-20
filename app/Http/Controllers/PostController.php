@@ -10,7 +10,7 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::selectAll(); 
+        $posts = Post::selectAll(session('user')['id']); 
         return view('board', [
             'posts' => $posts, 
             'user_id' => session('user')['id'], 

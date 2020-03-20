@@ -45,6 +45,18 @@
                     <div><a>Name</a> <?= $post->user_name; ?></div>
                     <div><a>Created time</a> <?= substr($post->created_at, 0, strlen($post->created_at)-3); ?></div>
                     <div><a>Content</a> <?= $post->content; ?></div>
+                    <form action="like" method="post">
+                        @csrf
+                        <input type="hidden" name="post_id" value="<?= $post->id; ?>"></input>
+                        @if (!$post->like)
+                            <input type="hidden" name="isStore" value=1></input>
+                            <input type="submit" value="Like"/>
+                        @else
+                            <img src="{{ asset('img/like.png') }}" width="20px" height="20px">
+                            <input type="hidden" name="isStore" value=0></input>
+                            <input type="submit" value="Unlike"/>
+                        @endif
+                    </form> 
                     <form action="comment" method="get">
                         @csrf
                         <input type="hidden" name="post_id" value="<?= $post->id; ?>"></input>
