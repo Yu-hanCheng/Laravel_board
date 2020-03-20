@@ -48,7 +48,7 @@
                     <tr><td>{{ $response['post']['content'] }}</td></tr>
                     <tr><td><b>Who likes:</b> 
                         @foreach ($response['likes'] as $user)
-                               <a>{{ $user['name'].', ' }}</a>
+                               <a>{{ $user['user']['name'].', ' }}</a>
                                 
                         @endforeach
                     </td></tr>
@@ -75,7 +75,7 @@
                         <td>{{ $comment['content'] }}</td>
                         <td>
                             <table>
-                                @foreach ($comment['reply'] as $reply)
+                                @foreach ($comment['replies'] as $reply)
                                     <tr>
                                         <td>{{ $reply['user_name'] }}</td>
                                         <td>{{ $reply['content'] }}</td>

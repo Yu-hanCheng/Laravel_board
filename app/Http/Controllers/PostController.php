@@ -10,7 +10,9 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::selectAll(session('user')['id']); 
+        $posts = Post::with(['likes' => function ($query) {
+            $query->where('user_id', session('user')['id']);
+        }])->get(); 
         return view('board', [
             'posts' => $posts, 
             'user_id' => session('user')['id'], 

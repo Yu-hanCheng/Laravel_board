@@ -21,4 +21,8 @@ class Like extends Model
     {
         self::where([['user_id','=',$like['user_id']],['post_id','=', $like['post_id']]])->delete();
     }
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }

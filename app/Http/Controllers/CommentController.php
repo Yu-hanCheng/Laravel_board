@@ -15,9 +15,9 @@ class CommentController extends Controller
      */
     public function index()
     {
-        $response= "";
+        $response = "";
         try {
-            $response= json_decode(json_encode(Comment::showComments($_GET['post_id'])),true);
+            $response = json_decode(json_encode(Comment::showComments($_GET['post_id'])),true);
         } catch (\Throwable  $e) {
             echo $e->getMessage();
         }

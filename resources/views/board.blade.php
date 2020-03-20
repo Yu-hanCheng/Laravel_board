@@ -48,7 +48,7 @@
                     <form action="like" method="post">
                         @csrf
                         <input type="hidden" name="post_id" value="{{ $post->id }}"></input>
-                        @if (!$post->like)
+                        @if (count($post->likes) == 0)
                             <input type="hidden" name="isStore" value=1></input>
                             <input type="submit" value="Like"/>
                         @else
