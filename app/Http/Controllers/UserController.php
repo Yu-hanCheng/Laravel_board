@@ -40,6 +40,11 @@ class UserController extends Controller
         } 
     }
 
+    public function logout(Request $request)
+    {
+        session(['user' => ""]);
+        return redirect()->route('login.view')->with('message', "Logout successfully!");
+    }
     /**
      * Store a newly created resource in storage.
      *
