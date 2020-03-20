@@ -37,7 +37,7 @@
                         @csrf
                         <input type="hidden" name="type" value="1"></input>
                         <input type="hidden" name="post_id" value="<?= $response['post']['id']; ?>"></input>
-                        <input type="text" name="content"/>
+                        <input type="text" name="content" required/>
                         <input type="submit" value="Reply">
                     </form>
                 </div>
@@ -58,7 +58,7 @@
                             <a>Comment...</a>
                             <input type="hidden" name="post_id" value="<?= $response['post']['id']; ?>"></input>
                             <input type="hidden" name="type" value="0"/>>
-                            <input type="text" id="comment_content" name="content"/>> 
+                            <input type="text" id="comment_content" name="content" required/>> 
                             <input type="submit" value="Comment">
                         </form>
                     </tr>
