@@ -39,13 +39,17 @@
                 @else
                 <div class="title m-b-md">Laravel Board</div>
                 @endif
-
-                <ul>
+                <ul style="height: 450px; overflow: auto">
                 @foreach ($posts as $post)
                 <li>
                     <div><a>Name</a> <?= $post->user_name; ?></div>
                     <div><a>Created time</a> <?= substr($post->created_at, 0, strlen($post->created_at)-3); ?></div>
                     <div><a>Content</a> <?= $post->content; ?></div>
+                    <form action="comment" method="get">
+                        @csrf
+                        <input type="hidden" name="post_id" value="<?= $post->id; ?>"></input>
+                        <input type="submit" value="All Comments -->">
+                    </form> 
                     <form action="comment" method="post">
                         @csrf
                         <input type="hidden" name="post_id" value="<?= $post->id; ?>"></input>

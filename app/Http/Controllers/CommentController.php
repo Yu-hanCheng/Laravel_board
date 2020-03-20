@@ -15,7 +15,13 @@ class CommentController extends Controller
      */
     public function index()
     {
-        //
+        $response= "";
+        try {
+            $response= json_decode(json_encode(Comment::showComments($_GET['post_id'])),true);
+        } catch (\Throwable  $e) {
+            echo $e->getMessage();
+        }
+        return view('allComments',['response' => $response]);
     }
 
     /**
@@ -43,7 +49,7 @@ class CommentController extends Controller
             'content' => $request['content'],
             'created_at' => Carbon::now('Asia/Taipei'),
         ]);
-        return redirect()->route('board');
+        return redirect()->route('comment.show',['post_id' => $request['post_id']]);
     }
 
     /**

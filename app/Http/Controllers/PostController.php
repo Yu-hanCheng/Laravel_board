@@ -26,6 +26,6 @@ class PostController extends Controller
             'content' => $request['content'],
             'created_at' => Carbon::now('Asia/Taipei'),
         ]);
-        return redirect()->route('board');
+        return redirect()->route('board.show');
     }
 }
