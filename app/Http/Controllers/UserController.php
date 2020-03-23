@@ -56,7 +56,7 @@ class UserController extends Controller
         if (isset($request['name'])) {
             $aUser = User::storeUser([
                 'name' => $request['name'],
-                'password' => $request['password'],
+                'password' => hash('sha256', $request['password']),
                 'created_at' => Carbon::now('Asia/Taipei')
             ]); 
             if (!$aUser) {
