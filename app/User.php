@@ -56,7 +56,7 @@ class User extends Authenticatable
     {
         $user = self::where('name', $name)->first();
           if ($user) {
-              if ($password == $user->password) {
+              if (hash('sha256', $password) == $user->password) {
                 $user = json_decode(json_encode($user), true);
                 return [1, $user];
               } else {
