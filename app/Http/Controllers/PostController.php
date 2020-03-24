@@ -10,11 +10,22 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::with(['likes' => function ($query) {
-            $query->where('user_id', session('user')['id']);
-        }])->where('layer',0)->orderBy('created_at','desc')->get(); 
+        $all = Post::with([
+            'comments' => function ($query) {
+                    $query->with([
+                        'replies' => function ($query) { $query->with('user')->orderBy('created_at','desc')->get();},
+                        'user']
+                        )->orderBy('created_at','desc')->get();
+                    },
+            'likes' => function ($query) {
+                    $query->where('user_id', session('user')['id']);
+                    },
+            'likesC',
+            'user'])
+            ->where('layer',0) 
+            ->orderBy('created_at','desc')->get();
         return view('board', [
-            'posts' => $posts, 
+            'posts' => $all, 
             'user_id' => session('user')['id'], 
             'user_name' => session('user')['name']
             ]);
