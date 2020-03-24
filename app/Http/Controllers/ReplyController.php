@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Reply;
+use App\Post;
 use Carbon\Carbon;
 
 class ReplyController extends Controller
@@ -36,10 +36,10 @@ class ReplyController extends Controller
      */
     public function store(Request $request)
     {
-        Reply::storeReply([
-            'comment_id' => $request['comment_id'],
+        Post::create([
             'user_id' => session('user')['id'],
-            'name' => session('user')['name'],
+            'post_id' => $request['comment_id'],
+            'layer' => 2,
             'content' => $request['content'],
             'created_at' => Carbon::now('Asia/Taipei'),
         ]);

@@ -12,7 +12,7 @@ class PostController extends Controller
     {
         $posts = Post::with(['likes' => function ($query) {
             $query->where('user_id', session('user')['id']);
-        }])->get(); 
+        }])->where('layer',0)->orderBy('created_at','desc')->get(); 
         return view('board', [
             'posts' => $posts, 
             'user_id' => session('user')['id'], 
@@ -24,7 +24,8 @@ class PostController extends Controller
     {
         Post::create([
             'user_id' => $request['user_id'],
-            'user_name' =>$request['user_name'],
+            'post_id' => null,
+            'layer' => 0,
             'content' => $request['content'],
             'created_at' => Carbon::now('Asia/Taipei'),
         ]);

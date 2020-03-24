@@ -65,6 +65,7 @@
                     <form action="comment" method="post">
                         @csrf
                         <input type="hidden" name="post_id" value="{{ $post->id }}"></input>
+                        <input type="hidden" name="user_id" value="{{ $user_id }}"/>
                         <input type="hidden" name="type" value="0"></input>
                         <input type="text" id="content" name="content" required><br><br>
                         <input type="submit" value="Comment">

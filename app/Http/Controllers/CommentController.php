@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Comment;
+use App\Post;
 use Carbon\Carbon;
 
 class CommentController extends Controller
@@ -17,11 +17,14 @@ class CommentController extends Controller
     {
         $response = "";
         try {
-            $response = json_decode(json_encode(Comment::showComments($_GET['post_id'])),true);
+            $response = json_decode(json_encode(Post::showComments($_GET['post_id'])),true);
         } catch (\Throwable  $e) {
             echo $e->getMessage();
         }
-        return view('allComments',['response' => $response]);
+        return view('allComments', [
+            'response' => $response,
+            'user_id' => session('user')['id']
+            ]);
     }
 
     /**
@@ -42,10 +45,10 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        Comment::storeComment([
+        Post::create([
+            'user_id' => $request['user_id'],
             'post_id' => $request['post_id'],
-            'user_id' => session('user')['id'],
-            'name' => session('user')['name'],
+            'layer' => 1,
             'content' => $request['content'],
             'created_at' => Carbon::now('Asia/Taipei'),
         ]);

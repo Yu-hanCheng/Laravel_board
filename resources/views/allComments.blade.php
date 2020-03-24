@@ -57,6 +57,7 @@
                             @csrf
                             <a>Comment...</a>
                             <input type="hidden" name="post_id" value="{{ $response['post']['id'] }}"></input>
+                            <input type="hidden" name="user_id" value="{{ $user_id }}"/>
                             <input type="hidden" name="type" value="0"/>>
                             <input type="text" id="comment_content" name="content" required/>> 
                             <input type="submit" value="Comment">
@@ -71,13 +72,13 @@
                     </tr>
                     @foreach ($response['Allcomments'] as $comment)
                     <tr>
-                        <td>{{ $comment['user_name'] }}</td>
+                        <td>{{ $comment['user']['name'] }}</td>
                         <td>{{ $comment['content'] }}</td>
                         <td>
                             <table>
                                 @foreach ($comment['replies'] as $reply)
                                     <tr>
-                                        <td>{{ $reply['user_name'] }}</td>
+                                        <td>{{ $reply['user']['name'] }}</td>
                                         <td>{{ $reply['content'] }}</td>
                                     </tr>
                                 @endforeach
