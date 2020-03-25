@@ -8,11 +8,15 @@ use Carbon\Carbon;
 
 class LikeController extends Controller
 {
-    public function store(Request $request)
+    protected $hidden = [
+        'created_at', 'updated_at', 'user_id'
+    ];
+
+    public function store(Request $request, $id)
     {
         $array = [
-            'post_id' => $request['post_id'],
-            'user_id' => session('user')['id'],
+            'post_id' => $id,
+            'user_id' => $request->user()->id,
             'created_at' => Carbon::now('Asia/Taipei')
         ];
         if ($request['isStore']) {

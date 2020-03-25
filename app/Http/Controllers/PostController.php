@@ -8,7 +8,7 @@ use Carbon\Carbon;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $all = Post::with([
             'comments' => function ($query) {
@@ -17,29 +17,25 @@ class PostController extends Controller
                         'user']
                         )->orderBy('created_at','desc')->get();
                     },
-            'likes' => function ($query) {
-                    $query->where('user_id', session('user')['id']);
+            'isLike' => function ($query) use ($request){
+                    $query->where('user_id', $request->user()->id)->first();
                     },
-            'likesC',
+            'likeList',
             'user'])
             ->where('layer',0) 
             ->orderBy('created_at','desc')->get();
-        return view('board', [
-            'posts' => $all, 
-            'user_id' => session('user')['id'], 
-            'user_name' => session('user')['name']
-            ]);
+        return response()->json(["posts" => $all], 200);
     }
 
     public function store(Request $request)
     {
-        Post::create([
-            'user_id' => $request['user_id'],
-            'post_id' => null,
-            'layer' => 0,
+        $post = Post::create([
+            'user_id' => $request->user()->id,
+            'parent_id' => $request['parent_id'],
+            'layer' => $request['layer'],
             'content' => $request['content'],
             'created_at' => Carbon::now('Asia/Taipei'),
         ]);
-        return redirect()->route('board.show');
+        return response()->json(["msg" => "successfully"], 201);
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -42,13 +43,13 @@ class User extends Authenticatable
     { 
         $isUnique = self::where('name',$user['name'])->first();
         if ($isUnique) {
-            return false;
+            return [false];
         } else {
-            self::create(
+            $user = self::create(
                 ['name' => $user['name'],
                 'password' => $user['password'],
                 'created_at' => $user['created_at']]);
-            return true;
+            return [true, $user];
         }
     }
 
@@ -56,8 +57,7 @@ class User extends Authenticatable
     {
         $user = self::where('name', $name)->first();
           if ($user) {
-              if (hash('sha256', $password) == $user->password) {
-                $user = json_decode(json_encode($user), true);
+              if (Hash::check($password, $user->password)) {
                 return [1, $user];
               } else {
                   return [0, "Password does not match"];

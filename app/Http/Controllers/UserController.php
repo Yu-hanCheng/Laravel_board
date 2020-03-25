@@ -33,20 +33,29 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
-        $aUser = User::isUser($request['name'],$request['password']); 
+        $aUser = User::isUser($request['name'], $request['password']); 
         if ($aUser[0]) {
             session(['user' => $aUser[1]]);
-            return redirect()->route('board.show');
+            $token = hash('sha256',Str::random(80));
+            $aUser[1]->forceFill([
+                'api_token' => $token,
+                ])->save();
+            return response()->json(["msg" => $token], 200);
         } else {
-            return redirect()->route('login.view')->with('message', $aUser[1]);
+            return response()->json(["msg" => $aUser[1]], 400);
         } 
     }
 
     public function logout(Request $request)
     {
-        session(['user' => ""]);
-        return redirect()->route('login.view')->with('message', "Logout successfully!");
+        $user = User::find($request->user()->id);
+        $token = hash('sha256', Str::random(80));
+        $user->forceFill([
+            'api_token' => $token,
+            ])->save();
+        return response()->json(["msg" => "successfully"], 200);
     }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -61,14 +70,19 @@ class UserController extends Controller
                 'password' => Hash::make($request['password']),
                 'api_token' => Str::random(80),
                 'created_at' => Carbon::now('Asia/Taipei')
-            ]); 
-            if (!$aUser) {
-                die("please enter another name");
+            ]);
+            if (!$aUser[0]) {
+                return response()->json(["msg" => "Please enter another name"], 400);
+            } else {
+                $token = hash('sha256', Str::random(80));
+                $aUser[1]->forceFill([
+                    'api_token' => $token,
+                    ])->save();
+                return response()->json(["msg" => $token], 201);
             }
         } else {
-            die("please enter the user name.");
+                return response()->json(["msg" => "Please enter the user name"], 400);
         }
-        return redirect()->route('login.view');
     }
 
     /**
