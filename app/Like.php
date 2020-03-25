@@ -8,6 +8,10 @@ class Like extends Model
 {
     protected $guarded = [];
 
+    protected $hidden = [
+        'post_id','updated_at','user_id','created_at','id'
+    ];
+
     public static function storeLike($like)
     {
         self::create([

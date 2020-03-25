@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\User;  
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -56,7 +58,8 @@ class UserController extends Controller
         if (isset($request['name'])) {
             $aUser = User::storeUser([
                 'name' => $request['name'],
-                'password' => hash('sha256', $request['password']),
+                'password' => Hash::make($request['password']),
+                'api_token' => Str::random(80),
                 'created_at' => Carbon::now('Asia/Taipei')
             ]); 
             if (!$aUser) {
