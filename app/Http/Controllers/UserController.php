@@ -8,6 +8,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -64,25 +65,24 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        if (isset($request['name'])) {
-            $aUser = User::storeUser([
+        $va = Validator::make($request->all(), [
+            'name' => 'required|unique:users|',
+            'password' =>'required',
+        ]);
+        
+        if ($va->fails()) {
+            return response()->json(['result'=>$va->errors()],416);
+        }
+        $token = hash('sha256', Str::random(80));
+        $user = User::create([
                 'name' => $request['name'],
                 'password' => Hash::make($request['password']),
-                'api_token' => Str::random(80),
                 'created_at' => Carbon::now('Asia/Taipei')
             ]);
-            if (!$aUser[0]) {
-                return response()->json(["msg" => "Please enter another name"], 400);
-            } else {
-                $token = hash('sha256', Str::random(80));
-                $aUser[1]->forceFill([
-                    'api_token' => $token,
-                    ])->save();
-                return response()->json(["msg" => $token], 201);
-            }
-        } else {
-                return response()->json(["msg" => "Please enter the user name"], 400);
-        }
+        $user->forceFill([
+                'api_token' => $token,
+            ])->save();
+        return response()->json(["msg" => $token], 201);
     }
 
     /**

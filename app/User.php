@@ -39,20 +39,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public static function storeUser($user)
-    { 
-        $isUnique = self::where('name',$user['name'])->first();
-        if ($isUnique) {
-            return [false];
-        } else {
-            $user = self::create(
-                ['name' => $user['name'],
-                'password' => $user['password'],
-                'created_at' => $user['created_at']]);
-            return [true, $user];
-        }
-    }
-
     public static function isUser($name, $password)
     {
         $user = self::where('name', $name)->first();

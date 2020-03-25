@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use App\Post;  
 use Carbon\Carbon;
 
@@ -29,13 +30,30 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
-        $post = Post::create([
-            'user_id' => $request->user()->id,
-            'parent_id' => $request['parent_id'],
-            'layer' => $request['layer'],
-            'content' => $request['content'],
-            'created_at' => Carbon::now('Asia/Taipei'),
+        $va = Validator::make($request->all(), [
+            'parent_id' => 'nullable|integer|min:1',
+            'layer' =>'required|integer|between:0,2',
+            'content' => 'required|max:205',
         ]);
-        return response()->json(["msg" => "successfully"], 201);
+        
+        if ($va->fails()) {
+            return response()->json(['result'=>$va->errors()],416);
+        }
+        
+        if ($request['parent_id']=="" and $request['layer']>0){
+            return response()->json(["msg" => "invalid layer"], 400); 
+        } elseif ($request['parent_id']!="" and $request['layer']==0) {
+            return response()->json(["msg" => "invalid layer"], 400); 
+        } else {
+            Post::create([
+                'user_id' => $request->user()->id,
+                'parent_id' => $request['parent_id'],
+                'layer' => $request['layer'],
+                'content' => $request['content'],
+                'created_at' => Carbon::now('Asia/Taipei'),
+            ]);
+            return response()->json(["msg" => "successfully"], 201);
+        }
+
     }
 }
