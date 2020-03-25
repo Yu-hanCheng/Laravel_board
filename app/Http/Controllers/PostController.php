@@ -18,7 +18,7 @@ class PostController extends Controller
                         )->orderBy('created_at','desc')->get();
                     },
             'isLike' => function ($query) use ($request){
-                    $query->where('user_id', $request->user()->id)->first();
+                    $query->where('user_id', $request->user()->id)->get();
                     },
             'likeList',
             'user'])

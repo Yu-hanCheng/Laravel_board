@@ -19,11 +19,13 @@ class LikeController extends Controller
             'user_id' => $request->user()->id,
             'created_at' => Carbon::now('Asia/Taipei')
         ];
-        if ($request['isStore']) {
+        if ($request['isLike']) {
             Like::storeLike($array);
+            return response()->json(["msg" => "like successfully"], 200);
         } else {
             Like::removeLike($array);
+            return response()->json(["msg" => "unlike successfully"], 200);
         }
-        return redirect()->route('board.show');
+        
     }
 }
