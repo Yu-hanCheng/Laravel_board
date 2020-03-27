@@ -25,7 +25,7 @@ class PostController extends Controller
             'likeList',
             'user'])
             ->withCount(['isLike' => function ($query) use ($request) {
-                    $query->where('user_id', $request->user()->id)->get();
+                    $query->where('user_id', $request->user()->id);
                     }])
             ->where('layer', self::LAYER_POST) 
             ->orderBy('created_at', 'desc')->get();
