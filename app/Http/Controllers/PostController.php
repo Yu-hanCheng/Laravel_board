@@ -9,6 +9,7 @@ use Carbon\Carbon;
 
 class PostController extends Controller
 {
+    const LAYER_POST = 0;
     public function index(Request $request)
     {
         $all = Post::with([
@@ -18,12 +19,12 @@ class PostController extends Controller
                         'user']
                         )->orderBy('created_at','desc')->get();
                     },
-            'isLike' => function ($query) use ($request){
-                    $query->where('user_id', $request->user()->id)->get();
-                    },
             'likeList',
             'user'])
-            ->where('layer',0) 
+            ->withCount(['isLike' => function ($query) use ($request){
+                    $query->where('user_id', $request->user()->id)->get();
+                    }])
+            ->where('layer', self::LAYER_POST) 
             ->orderBy('created_at','desc')->get();
         return response()->json(["posts" => $all], 200);
     }
@@ -37,12 +38,12 @@ class PostController extends Controller
                         'user']
                         )->orderBy('created_at','desc')->get();
                     },
-            'isLike' => function ($query) use ($request){
-                    $query->where('user_id', 0)->get();
-                    },
             'likeList',
             'user'])
-            ->where('layer',0) 
+            ->withCount(['isLike' => function ($query) use ($request){
+                    $query->where('user_id', 0);
+                    }])
+            ->where('layer', self::LAYER_POST)
             ->orderBy('created_at','desc')->get();
         return response()->json(["posts" => $all], 200);
     }
@@ -59,9 +60,9 @@ class PostController extends Controller
             return response()->json(['msg' => $va->errors()], 416);
         }
         
-        if ($request['parent_id'] == ""  and  $request['layer'] > 0){
+        if ($request['parent_id'] == ""  and  $request['layer'] != self::LAYER_POST){
             return response()->json(["msg" => "invalid layer"], 400); 
-        } elseif ($request['parent_id'] != ""  and  $request['layer'] == 0) {
+        } elseif ($request['parent_id'] != ""  and  $request['layer'] == self::LAYER_POST) {
             return response()->json(["msg" => "invalid layer"], 400); 
         } else {
             Post::create([
