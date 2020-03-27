@@ -71,7 +71,7 @@ class UserController extends Controller
         ]);
         
         if ($va->fails()) {
-            return response()->json(['result'=>$va->errors()],416);
+            return response()->json(['msg' => $va->errors()], 416);
         }
         $token = hash('sha256', Str::random(80));
         $user = User::create([

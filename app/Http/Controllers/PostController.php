@@ -37,12 +37,12 @@ class PostController extends Controller
         ]);
         
         if ($va->fails()) {
-            return response()->json(['result'=>$va->errors()],416);
+            return response()->json(['msg' => $va->errors()], 416);
         }
         
-        if ($request['parent_id']=="" and $request['layer']>0){
+        if ($request['parent_id'] == ""  and  $request['layer'] > 0){
             return response()->json(["msg" => "invalid layer"], 400); 
-        } elseif ($request['parent_id']!="" and $request['layer']==0) {
+        } elseif ($request['parent_id'] != ""  and  $request['layer'] == 0) {
             return response()->json(["msg" => "invalid layer"], 400); 
         } else {
             Post::create([
