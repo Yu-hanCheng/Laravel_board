@@ -37,6 +37,9 @@ class PostController extends Controller
                         'user']
                         )->orderBy('created_at','desc')->get();
                     },
+            'isLike' => function ($query) use ($request){
+                    $query->where('user_id', 0)->get();
+                    },
             'likeList',
             'user'])
             ->where('layer',0) 
