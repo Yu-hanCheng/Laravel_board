@@ -15,7 +15,7 @@ class LikeController extends Controller
             'post_id' => 'required|exists:posts,id'
         ]);
         if ($va->fails()) {
-            return response()->json(['msg' => $va->errors()], 416);
+            return response()->json(['msg' => (string)$va->errors()], 416);
         }
         if (Like::where([
             ['post_id', '=', $id],

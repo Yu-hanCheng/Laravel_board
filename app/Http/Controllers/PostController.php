@@ -62,7 +62,7 @@ class PostController extends Controller
         ]);
         
         if ($va->fails()) {
-            return response()->json(['msg' => $va->errors()], 416);
+            return response()->json(['msg' => (string)$va->errors()], 416);
         }
         
         if ($request['parent_id'] == ""  and  $request['layer'] != self::LAYER_POST){
