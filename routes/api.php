@@ -16,10 +16,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login','UserController@login');
 Route::post('register','UserController@store');
-Route::get('board','PostController@index');
+Route::get('index','PostController@indexWithoutLogin');
 
 Route::group(['middleware' => ['auth:api']], function(){
     Route::get('logout','UserController@logout');
     Route::post('post','PostController@store');
+    Route::get('board','PostController@index');
     Route::get('like/{post_id}','LikeController@store');
 });

@@ -28,6 +28,22 @@ class PostController extends Controller
         return response()->json(["posts" => $all], 200);
     }
 
+    public function indexWithoutLogin(Request $request)
+    {
+        $all = Post::with([
+            'comments' => function ($query) {
+                    $query->with([
+                        'replies' => function ($query) { $query->with('user')->orderBy('created_at','desc')->get();},
+                        'user']
+                        )->orderBy('created_at','desc')->get();
+                    },
+            'likeList',
+            'user'])
+            ->where('layer',0) 
+            ->orderBy('created_at','desc')->get();
+        return response()->json(["posts" => $all], 200);
+    }
+
     public function store(Request $request)
     {
         $va = Validator::make($request->all(), [
