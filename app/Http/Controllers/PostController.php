@@ -10,22 +10,25 @@ use Carbon\Carbon;
 class PostController extends Controller
 {
     const LAYER_POST = 0;
+
     public function index(Request $request)
     {
         $all = Post::with([
             'comments' => function ($query) {
                     $query->with([
-                        'replies' => function ($query) { $query->with('user')->orderBy('created_at','desc')->get();},
+                        'replies' => function ($query) {
+                            $query->with('user')->orderBy('created_at', 'desc')->get();
+                        },
                         'user']
-                        )->orderBy('created_at','desc')->get();
+                        )->orderBy('created_at', 'desc')->get();
                     },
             'likeList',
             'user'])
-            ->withCount(['isLike' => function ($query) use ($request){
+            ->withCount(['isLike' => function ($query) use ($request) {
                     $query->where('user_id', $request->user()->id)->get();
                     }])
             ->where('layer', self::LAYER_POST) 
-            ->orderBy('created_at','desc')->get();
+            ->orderBy('created_at', 'desc')->get();
         return response()->json(["posts" => $all], 200);
     }
 
@@ -34,17 +37,19 @@ class PostController extends Controller
         $all = Post::with([
             'comments' => function ($query) {
                     $query->with([
-                        'replies' => function ($query) { $query->with('user')->orderBy('created_at','desc')->get();},
+                        'replies' => function ($query) {
+                            $query->with('user')->orderBy('created_at', 'desc')->get();
+                        },
                         'user']
-                        )->orderBy('created_at','desc')->get();
+                        )->orderBy('created_at', 'desc')->get();
                     },
             'likeList',
             'user'])
-            ->withCount(['isLike' => function ($query) use ($request){
+            ->withCount(['isLike' => function ($query) use ($request) {
                     $query->where('user_id', 0);
                     }])
             ->where('layer', self::LAYER_POST)
-            ->orderBy('created_at','desc')->get();
+            ->orderBy('created_at', 'desc')->get();
         return response()->json(["posts" => $all], 200);
     }
 
@@ -74,6 +79,5 @@ class PostController extends Controller
             ]);
             return response()->json(["msg" => "successfully"], 201);
         }
-
     }
 }

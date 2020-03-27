@@ -37,7 +37,7 @@ class UserController extends Controller
         $aUser = User::isUser($request['name'], $request['password']); 
         if ($aUser[0]) {
             session(['user' => $aUser[1]]);
-            $token = hash('sha256',Str::random(80));
+            $token = hash('sha256', Str::random(80));
             $aUser[1]->forceFill([
                 'api_token' => $token,
                 ])->save();

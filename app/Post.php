@@ -8,11 +8,11 @@ class Post extends Model
 {
     protected $guarded = [];
     protected $hidden = [
-        'parent_id','updated_at','layer','user_id'
+        'parent_id', 'updated_at', 'layer', 'user_id'
     ];
 
     public function replies () {
-        return $this->hasMany(self::class,'parent_id');
+        return $this->hasMany(self::class, 'parent_id');
     }
 
     public function comments() {
