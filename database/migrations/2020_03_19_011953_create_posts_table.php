@@ -18,9 +18,7 @@ class CreatePostsTable extends Migration
             $table->string('content');
             $table->integer('layer');
             $table->unsignedBigInteger('parent_id')->nullable();
-            $table->foreign('parent_id')->references('id')->on('posts');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
