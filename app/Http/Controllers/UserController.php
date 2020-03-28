@@ -37,9 +37,9 @@ class UserController extends Controller
         $aUser = User::isUser($request['name'], $request['password']); 
         if ($aUser[0]) {
             session(['user' => $aUser[1]]);
-            $token = hash('sha256', Str::random(80));
+            $token = Str::random(80);
             $aUser[1]->forceFill([
-                'api_token' => $token,
+                'api_token' => hash('sha256', $token),
                 ])->save();
             return response()->json(["msg" => $token], 200);
         } else {
@@ -50,9 +50,9 @@ class UserController extends Controller
     public function logout(Request $request)
     {
         $user = User::find($request->user()->id);
-        $token = hash('sha256', Str::random(80));
+        $token = Str::random(80);
         $user->forceFill([
-            'api_token' => $token,
+            'api_token' => hash('sha256', $token),
             ])->save();
         return response()->json(["msg" => "successfully"], 200);
     }
@@ -73,14 +73,14 @@ class UserController extends Controller
         if ($va->fails()) {
             return response()->json(['msg' => (string)$va->errors()], 416);
         }
-        $token = hash('sha256', Str::random(80));
+        $token = Str::random(80);
         $user = User::create([
                 'name' => $request['name'],
                 'password' => Hash::make($request['password']),
                 'created_at' => Carbon::now('Asia/Taipei')
             ]);
         $user->forceFill([
-                'api_token' => $token,
+                'api_token' => hash('sha256', $token),
             ])->save();
         return response()->json(["msg" => $token], 201);
     }
