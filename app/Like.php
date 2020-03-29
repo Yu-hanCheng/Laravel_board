@@ -10,6 +10,10 @@ class Like extends Model
     protected $hidden = [
         'post_id', 'updated_at', 'user_id', 'created_at', 'id'
     ];
+    protected $casts = [
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp',
+    ];
 
     public static function storeLike($like)
     {

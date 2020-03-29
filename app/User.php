@@ -36,7 +36,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp',
     ];
 
     public static function isUser($name, $password)

@@ -10,6 +10,10 @@ class Post extends Model
     protected $hidden = [
         'parent_id', 'updated_at', 'layer', 'user_id'
     ];
+    protected $casts = [
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp',
+    ];
 
     public function replies () {
         return $this->hasMany(self::class, 'parent_id');
