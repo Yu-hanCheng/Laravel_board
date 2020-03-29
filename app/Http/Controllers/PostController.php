@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Post;  
-use Carbon\Carbon;
 
 class PostController extends Controller
 {
@@ -75,7 +74,6 @@ class PostController extends Controller
                 'parent_id' => $request['parent_id'],
                 'layer' => $request['layer'],
                 'content' => $request['content'],
-                'created_at' => Carbon::now('Asia/Taipei'),
             ]);
             return response()->json(["msg" => "successfully"], 201);
         }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Like;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 
 class LikeController extends Controller
@@ -26,7 +25,6 @@ class LikeController extends Controller
         $array = [
             'post_id' => $id,
             'user_id' => $request->user()->id,
-            'created_at' => Carbon::now('Asia/Taipei')
         ];
         if ($request['isLike']) {
             Like::storeLike($array);

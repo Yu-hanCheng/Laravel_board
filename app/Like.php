@@ -16,7 +16,6 @@ class Like extends Model
         self::create([
             'post_id' => $like['post_id'],
             'user_id' => $like['user_id'],
-            'created_at' => $like['created_at']
             ]);
     }
 

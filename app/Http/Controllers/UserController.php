@@ -77,7 +77,6 @@ class UserController extends Controller
         $user = User::create([
                 'name' => $request['name'],
                 'password' => Hash::make($request['password']),
-                'created_at' => Carbon::now('Asia/Taipei')
             ]);
         $user->forceFill([
                 'api_token' => hash('sha256', $token),
