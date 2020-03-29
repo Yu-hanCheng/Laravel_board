@@ -24,30 +24,9 @@ class PostController extends Controller
             'likeList',
             'user'])
             ->withCount(['isLike' => function ($query) use ($request) {
-                    $query->where('user_id', $request->user()->id);
+                    $query->where('user_id', $request->user()->id ?? 0);
                     }])
             ->where('layer', self::LAYER_POST) 
-            ->orderBy('created_at', 'desc')->get();
-        return response()->json(["posts" => $all], 200);
-    }
-
-    public function indexWithoutLogin(Request $request)
-    {
-        $all = Post::with([
-            'comments' => function ($query) {
-                    $query->with([
-                        'replies' => function ($query) {
-                            $query->with('user')->orderBy('created_at', 'desc')->get();
-                        },
-                        'user']
-                        )->orderBy('created_at', 'desc')->get();
-                    },
-            'likeList',
-            'user'])
-            ->withCount(['isLike' => function ($query) use ($request) {
-                    $query->where('user_id', 0);
-                    }])
-            ->where('layer', self::LAYER_POST)
             ->orderBy('created_at', 'desc')->get();
         return response()->json(["posts" => $all], 200);
     }
