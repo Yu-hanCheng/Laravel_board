@@ -19,6 +19,9 @@ Route::post('register','UserController@store');
 Route::get('index','PostController@indexWithoutLogin');
 Route::get('board','PostController@index');
 
+Route::get('Love','LoveController@Love');
+
+
 Route::group(['middleware' => ['auth:api']], function(){
     Route::get('logout','UserController@logout');
     Route::post('post','PostController@store');
