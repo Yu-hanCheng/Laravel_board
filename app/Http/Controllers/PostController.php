@@ -12,6 +12,30 @@ class PostController extends Controller
 
     public function index(Request $request)
     {
+//        SOJ: 更優雅的寫法
+//        $posts = Post::where('parent_id', null)
+//            ->with([
+//                'comments', //post.comments comments.replies
+//                'likeList', //post.likeList
+//                'user', //post.user
+//            ])
+//            ->withCount('likeList')
+//            ->orderBy('updated_at', 'desc')
+//            ->get();
+//
+//        foreach($posts as $post) {
+//            $isLiked = false;
+//            foreach($post->likeList as $list) {
+//                $userName = $request->user() ? $request->user()->name : '';
+//                if ($list->user->name == $userName) {
+//                    $isLiked = true;
+//                }
+//            }
+//            $post['isLiked'] = $isLiked;
+//        }
+//
+//        return response(['posts' => $posts], 200);
+
         $all = Post::with([
             'comments' => function ($query) {
                     $query->with([
@@ -26,7 +50,7 @@ class PostController extends Controller
             ->withCount(['isLike' => function ($query) use ($request) {
                     $query->where('user_id', $request->user()->id ?? 0);
                     }])
-            ->where('layer', self::LAYER_POST) 
+            ->where('layer', self::LAYER_POST)
             ->orderBy('created_at', 'desc')->get();
         return response()->json(["posts" => $all], 200);
     }
@@ -54,6 +78,7 @@ class PostController extends Controller
                 'layer' => $request['layer'],
                 'content' => $request['content'],
             ]);
+//            SOJ: 通常創建成功，要直接回傳 data
             return response()->json(["msg" => "successfully"], 201);
         }
     }

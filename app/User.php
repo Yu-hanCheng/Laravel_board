@@ -19,6 +19,8 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name', 'password'
+//        SOJ: api_token 應該要加入白名單
+//        'name', 'password', 'api_token'
     ];
 
     /**
@@ -52,5 +54,18 @@ class User extends Authenticatable
           } else {
               return [0, "User does not exist"];
           }
-    } 
+    }
+
+//    SOJ: 更優雅的寫法
+//    public static function check($name, $password)
+//    {
+//        $user = self::where('name', $name)->first();
+//        if ($user) {
+//            if (Hash::check($password, $user->password)) {
+//                return $user;
+//            }
+//            throw new \Exception('Password does not match');
+//        }
+//        throw new \Exception('User does not exist');
+//    }
 }
