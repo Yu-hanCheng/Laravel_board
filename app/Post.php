@@ -15,7 +15,8 @@ class Post extends Model
         'updated_at' => 'timestamp',
     ];
 
-    public function replies () {
+    public function replies () 
+    {
         return $this->hasMany(self::class, 'parent_id');
 //        SOJ: 更優雅的寫法
 //        return $this->hasMany(self::class, 'parent_id')
@@ -24,7 +25,8 @@ class Post extends Model
         //replies.user
     }
 
-    public function comments() {
+    public function comments() 
+    {
         return $this->hasMany(self::class, 'parent_id');
 //        SOJ: 更優雅的寫法
 //        return $this->hasMany(self::class, 'parent_id')
@@ -32,15 +34,18 @@ class Post extends Model
 //            ->with('replies'); //replies
     }
 
-    public function likeList () {
+    public function likeList () 
+    {
         return $this->hasMany(Like::class, 'post_id')->with('user');
     }
     
-    public function isLike () {
+    public function isLike () 
+    {
         return $this->hasMany(Like::class, 'post_id');
     }
 
-    public function user () {
+    public function user () 
+    {
         return $this->belongsTo(User::class);
     }
 

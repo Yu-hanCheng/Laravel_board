@@ -34,13 +34,16 @@ class LikeController extends Controller
             'post_id' => $id,
             'user_id' => $request->user()->id,
         ];
-        if ($request['isLike']) {
+
+        if (Like::where([
+            ['post_id', '=', $id],
+            ['user_id', '=', $request->user()->id],
+            ])->get()->count() > 0) {
+                Like::removeLike($array);
+                return response()->json(["msg" => "unlike successfully"], 200);
+        } else {
             Like::storeLike($array);
             return response()->json(["msg" => "like successfully"], 200);
-        } else {
-            Like::removeLike($array);
-            return response()->json(["msg" => "unlike successfully"], 200);
         }
-        
     }
 }
