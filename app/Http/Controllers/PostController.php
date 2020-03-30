@@ -13,15 +13,16 @@ class PostController extends Controller
     public function index(Request $request)
     {
 //        SOJ: 更優雅的寫法
-//        $posts = Post::where('parent_id', null)
-//            ->with([
-//                'comments', //post.comments comments.replies
-//                'likeList', //post.likeList
-//                'user', //post.user
-//            ])
-//            ->withCount('likeList')
-//            ->orderBy('updated_at', 'desc')
-//            ->get();
+        $posts = Post::where('parent_id', null)
+            ->with([
+                'comments', //post.comments comments.replies
+                'likeList', //post.likeList
+                'user', //post.user
+            ])
+            ->withCount('likeList')
+            ->withCount('isLiked')
+            ->orderBy('updated_at', 'desc')
+            ->get();
 //
 //        foreach($posts as $post) {
 //            $isLiked = false;
@@ -34,7 +35,7 @@ class PostController extends Controller
 //            $post['isLiked'] = $isLiked;
 //        }
 //
-//        return response(['posts' => $posts], 200);
+        return response(['posts' => $posts], 200);
 
         $all = Post::with([
             'comments' => function ($query) {

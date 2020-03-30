@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class Post extends Model
 {
@@ -29,15 +30,17 @@ class Post extends Model
 //        SOJ: 更優雅的寫法
 //        return $this->hasMany(self::class, 'parent_id')
 //            ->with('user') //comments.user
-//            ->with('replies'); //replies
+//            ->with('replies') //replies
+//            ->orderBy('created_at', 'desc');
     }
 
     public function likeList () {
         return $this->hasMany(Like::class, 'post_id')->with('user');
     }
     
-    public function isLike () {
-        return $this->hasMany(Like::class, 'post_id');
+    public function isLiked () {
+        return $this->hasMany(Like::class, 'post_id')
+            ->where('user_id', auth()->check() ? auth()->user()->id : 0);
     }
 
     public function user () {
@@ -45,8 +48,22 @@ class Post extends Model
     }
 
     // SOJ: local scope
-//    public function scopeIdLessTen($query)
+//    public static function scopeSojIsLike($query, $userId)
 //    {
-//        return $query->where('id', '<', 10);
+//        return $query->with('user')->
 //    }
+    public function scopeIsLiked($query)
+    {
+        if (is_null($query->getQuery()->columns)) {
+            $query->select([$query->getQuery()->from . '.*']);
+        }
+        $relation = Relation::noConstraints(function () {
+            return $this->likeList();
+        });
+        $q = $this->likeList()->getRelationExistenceCountQuery(
+            $relation->getRelated()->where('user_id',
+                auth()->check() ? auth()->user()->id : 0)->newQuery(), $query
+        );
+        $query->selectSub($q->toBase(), 'is_liked');
+    }
 }
