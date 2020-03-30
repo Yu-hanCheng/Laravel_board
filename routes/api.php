@@ -16,11 +16,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login','UserController@login');
 Route::post('register','UserController@store');
+//SOJ: 沒用的 router 還不刪掉
 Route::get('index','PostController@indexWithoutLogin');
 Route::get('board','PostController@index');
 
-Route::get('Love','LoveController@Love');
-
+asdfgdhsjk
 
 Route::group(['middleware' => ['auth:api']], function(){
     Route::get('logout','UserController@logout');
