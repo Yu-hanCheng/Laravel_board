@@ -16,6 +16,14 @@ class LikeController extends Controller
         if ($va->fails()) {
             return response()->json(['msg' => (string)$va->errors()], 416);
         }
+//        SOJ: 更優雅的寫法
+//        $result = Like::createOrDestroy(
+//            ['post_id' => $id, 'user_id' => $request->user()->id]
+//        );
+//
+//        return response(['msg' => $result], 200);
+//
+//        SOJ: 永遠不能 unlike
         if (Like::where([
             ['post_id', '=', $id],
             ['user_id', '=', $request->user()->id],

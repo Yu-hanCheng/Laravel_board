@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use http\Exception\BadMethodCallException;
 
 class Handler extends ExceptionHandler
 {
@@ -50,6 +51,9 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        if ($exception instanceof BadMethodCallException) {
+            return response(['msg' => 'method not found'], 400);
+        }
         return parent::render($request, $exception);
     }
 }
