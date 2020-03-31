@@ -34,27 +34,20 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
-        $aUser = User::isUser($request['name'], $request['password']); 
-        if ($aUser[0]) {
-            session(['user' => $aUser[1]]);
+        try {
+            $user = User::check($request['name'], $request['password']); 
             $token = Str::random(80);
-            $aUser[1]->forceFill([
-                'api_token' => hash('sha256', $token),
-                ])->save();
-            return response()->json(["msg" => $token], 200);
-        } else {
-            return response()->json(["msg" => $aUser[1]], 400);
-        } 
+            $user->update(['api_token' => hash('sha256', $token)]);
+            return response(['msg' => $token], 200);
+        } catch (\Throwable $th) {
+            return response()->json(["msg" => $th], 400);
+        }
     }
 
     public function logout(Request $request)
     {
-        $user = User::find($request->user()->id);
-        $token = Str::random(80);
-        $user->forceFill([
-            'api_token' => hash('sha256', $token),
-            ])->save();
-        return response()->json(["msg" => "successfully"], 200);
+        $request->user()->update(['api_token' => NULL]);
+        return response(["msg" => $request->user()->id . " is logout"], 200);
     }
 
     /**
@@ -66,21 +59,19 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $va = Validator::make($request->all(), [
-            'name' => 'required|unique:users|',
+            'name' => 'required|max:20|unique:users|',
             'password' =>'required',
         ]);
         
         if ($va->fails()) {
-            return response()->json(['msg' => (string)$va->errors()], 416);
+            return response()->json(['msg' => (string)$va->errors()], 400);
         }
         $token = Str::random(80);
-        $user = User::create([
+        User::create([
                 'name' => $request['name'],
                 'password' => Hash::make($request['password']),
-            ]);
-        $user->forceFill([
                 'api_token' => hash('sha256', $token),
-            ])->save();
+            ]);
         return response()->json(["msg" => $token], 201);
     }
 

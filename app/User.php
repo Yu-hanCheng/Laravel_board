@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -18,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'password'
+        'name', 'password', 'api_token'
     ];
 
     /**
@@ -30,27 +31,20 @@ class User extends Authenticatable
         'id', 'password', 'remember_token', 'updated_at', 'created_at', 'api_token'
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'created_at' => 'timestamp',
-        'updated_at' => 'timestamp',
-    ];
+    public function getUpdatedAtAttribute($value)
+    {
+        return $this->attributes['updated_at'] = Carbon::parse($value)->timezone(config('app.timezone'))->toIso8601String();
+    }
 
-    public static function isUser($name, $password)
+    public static function check($name, $password)
     {
         $user = self::where('name', $name)->first();
-          if ($user) {
-              if (Hash::check($password, $user->password)) {
-                return [1, $user];
-              } else {
-                  return [0, "Password does not match"];
-              }
-          } else {
-              return [0, "User does not exist"];
-          }
-    } 
+        if ($user) {
+            if (Hash::check($password, $user->password)) {
+                return $user;
+            }
+            throw new \Exception('Password does not match');
+        }
+        throw new \Exception('User does not exist');
+    }
 }
