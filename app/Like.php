@@ -31,6 +31,18 @@ class Like extends Model
             ])->delete();
     }
 
+   public static function createOrDestroy($parameters)
+   {
+       // SOJ: 目前 comment and reply 是也可以按讚
+       if (self::where($parameters)->get()->count() > 0) {
+           self::removeLike($parameters);
+           return ' unLiked successfully';
+       } else {
+           self::storeLike($parameters);
+           return ' liked successfully';
+       }
+   }
+
     public function user() 
     {
         return $this->belongsTo(User::class);
