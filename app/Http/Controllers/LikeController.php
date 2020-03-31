@@ -14,7 +14,7 @@ class LikeController extends Controller
             'post_id' => 'bail|required|integer|exists:posts,id'
         ]);
         if ($va->fails()) {
-            return response()->json(['msg' => (string)$va->errors()], 416);
+            return response(['message' => (string)$va->errors()], 416);
         }
 
         $likeResult = Like::createOrDestroy([
@@ -22,6 +22,6 @@ class LikeController extends Controller
             'user_id' => $request->user()->id
             ]);
 
-        return response(['msg' => $id . $likeResult]);
+        return response(['message' => $id . $likeResult]);
     }
 }

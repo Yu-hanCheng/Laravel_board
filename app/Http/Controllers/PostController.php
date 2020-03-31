@@ -29,7 +29,7 @@ class PostController extends Controller
         ]);
         
         if ($va->fails()) {
-            return response()->json(['msg' => (string)$va->errors()], 416);
+            return response(['message' => (string)$va->errors()], 416);
         }
         
         $post = Post::create([
@@ -37,6 +37,6 @@ class PostController extends Controller
             'parent_id' => $request['parent_id'],
             'content' => $request['content'],
         ]);
-        return response()->json(["msg" => $post], 201);
+        return response(["message" => $post], 201);
     }
 }

@@ -38,16 +38,16 @@ class UserController extends Controller
             $user = User::check($request['name'], $request['password']); 
             $token = Str::random(80);
             $user->update(['api_token' => hash('sha256', $token)]);
-            return response(['msg' => $token], 200);
+            return response(['message' => $token], 200);
         } catch (\Throwable $th) {
-            return response()->json(["msg" => $th], 400);
+            return response(["message" => $th], 400);
         }
     }
 
     public function logout(Request $request)
     {
         $request->user()->update(['api_token' => NULL]);
-        return response(["msg" => $request->user()->id . " is logout"], 200);
+        return response(["message" => $request->user()->id . " is logout"], 200);
     }
 
     /**
@@ -64,7 +64,7 @@ class UserController extends Controller
         ]);
         
         if ($va->fails()) {
-            return response()->json(['msg' => (string)$va->errors()], 400);
+            return response(['message' => (string)$va->errors()], 400);
         }
         $token = Str::random(80);
         User::create([
@@ -72,7 +72,7 @@ class UserController extends Controller
                 'password' => Hash::make($request['password']),
                 'api_token' => hash('sha256', $token),
             ]);
-        return response()->json(["msg" => $token], 201);
+        return response(["message" => $token], 201);
     }
 
     /**
