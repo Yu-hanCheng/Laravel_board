@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Post extends Model
 {
@@ -10,10 +11,11 @@ class Post extends Model
     protected $hidden = [
         'parent_id', 'created_at', 'user_id'
     ];
-    protected $casts = [
-        'created_at' => 'timestamp',
-        'updated_at' => 'timestamp',
-    ];
+
+    public function getUpdatedAtAttribute($value)
+    {
+        return $this->attributes['updated_at'] = Carbon::parse($value)->timezone(config('app.timezone'))->toIso8601String();
+    }
    
     public function replies () 
     {
