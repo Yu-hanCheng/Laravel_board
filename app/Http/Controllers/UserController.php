@@ -40,7 +40,7 @@ class UserController extends Controller
             $user->update(['api_token' => hash('sha256', $token)]);
             return response(['message' => $token], 200);
         } catch (\Throwable $th) {
-            return response(["message" => $th], 400);
+            return response(["message" => $th->getMessage()], 400);
         }
     }
 
@@ -63,9 +63,12 @@ class UserController extends Controller
             'password' =>'required',
         ]);
         
-        if ($va->fails()) {
-            return response(['message' => (string)$va->errors()], 400);
-        }
+        if($va->errors()->has('name')){
+            return response(['message' => $va->errors()->messages()['name'][0]], 400);
+        };
+        if($va->errors()->has('password')){
+            return response(['message' => $va->errors()->messages()['password'][0]], 400);
+        };
         $token = Str::random(80);
         User::create([
                 'name' => $request['name'],

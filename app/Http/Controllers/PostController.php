@@ -18,20 +18,22 @@ class PostController extends Controller
             ->withCount('isLike')
             ->orderBy('updated_at', 'desc')
             ->get();
-        return response()->json(["posts" => $all], 200);
+        return response(["posts" => $all], 200);
     }
 
     public function store(Request $request)
     {
         $va = Validator::make($request->all(), [
-            'parent_id' => 'nullable|integer|min:1',
-            'content' => 'required|max:205',
+            'parent_id' => 'bail|nullable|integer|exists:posts,id',
+            'content' => 'bail|required|max:205',
         ]);
-        
-        if ($va->fails()) {
-            return response(['message' => (string)$va->errors()], 416);
-        }
-        
+
+        if($va->errors()->has('parent_id')){
+            return response(['message' => $va->errors()->messages()['parent_id'][0]], 400);
+        };
+        if($va->errors()->has('content')){
+            return response(['message' => $va->errors()->messages()['content'][0]], 400);
+        }; 
         $post = Post::create([
             'user_id' => $request->user()->id,
             'parent_id' => $request['parent_id'],

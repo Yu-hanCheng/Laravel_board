@@ -13,9 +13,9 @@ class LikeController extends Controller
         $va = Validator::make(['post_id' => $id], [
             'post_id' => 'bail|required|integer|exists:posts,id'
         ]);
-        if ($va->fails()) {
-            return response(['message' => (string)$va->errors()], 416);
-        }
+        if($va->errors()->has('post_id')){
+            return response(['message' => $va->errors()->messages()['post_id'][0]], 400);
+        };
 
         $likeResult = Like::createOrDestroy([
             'post_id' => $id,
