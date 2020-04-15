@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 
 class Post extends Model
 {
@@ -37,10 +38,14 @@ class Post extends Model
                     ->with('user');
     }
 
-    public function isLike() 
+    public function scopeWithIsLikes(Builder $query, $user_id)
     {
-        return $this->hasMany(Like::class, 'post_id')
-                    ->where('user_id', auth()->check() ? auth()->user()->id : 0);
+            $query->leftJoinSub(
+                "select post_id,count(user_id)isLike  from likes where user_id = ".$user_id.' group by post_id',
+                'likes',
+                'likes.post_id',
+                'posts.id'
+            );
     }
     
     public function user () 

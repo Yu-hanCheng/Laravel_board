@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use App\Like;
 
 class User extends Authenticatable
 {
@@ -28,7 +29,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'id', 'password', 'remember_token', 'updated_at', 'created_at', 'api_token'
+        'password', 'remember_token', 'updated_at', 'created_at', 'api_token'
     ];
 
     public function getUpdatedAtAttribute($value)
@@ -46,5 +47,10 @@ class User extends Authenticatable
             throw new \Exception('Password does not match');
         }
         throw new \Exception('User does not exist');
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
     }
 }

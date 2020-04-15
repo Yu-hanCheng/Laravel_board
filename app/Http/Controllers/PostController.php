@@ -15,7 +15,7 @@ class PostController extends Controller
                 'comments', 
                 'likeList',
                 'user'])
-            ->withCount('isLike')
+            ->withIsLikes($request->user() ? $request->user()->id: 0)
             ->orderBy('updated_at', 'desc')
             ->get();
         return response(["posts" => $all], 200);
